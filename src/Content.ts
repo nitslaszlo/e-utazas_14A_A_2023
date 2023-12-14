@@ -1,6 +1,7 @@
 ﻿import fs from "fs"; //  https://nodejs.org/docs/latest-v14.x/api/fs.html
 import http from "http"; //  https://nodejs.org/docs/latest-v14.x/api/http.html
 import url from "url"; //  https://nodejs.org/docs/latest-v14.x/api/url.html
+import Megoldás from "./Megoldás";
 
 export default function content(req: http.IncomingMessage, res: http.ServerResponse): void {
     // favicon.ico kérés kiszolgálása:
@@ -24,6 +25,11 @@ export default function content(req: http.IncomingMessage, res: http.ServerRespo
     const params = new url.URL(req.url as string, `http://${req.headers.host}/`).searchParams;
 
     // Kezd a kódolást innen -->
+    const mo: Megoldás = new Megoldás("utasadat.txt");
+
+    res.write(`2. feladat:\nA buszra ${mo.felszállók_száma} utas akart felszállni.\n`);
+
+    res.write(`3. feladat:\nA buszra ${mo.érvénytelenFelszállásokSzáma} utas nem szállhatott fel.\n`);
 
     //res.write("Egyszerű Hello World! (2023/2024)\n");
 
