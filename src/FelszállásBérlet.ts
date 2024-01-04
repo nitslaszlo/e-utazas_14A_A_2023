@@ -1,4 +1,5 @@
 import Felszállás from "./Felszállás";
+import Segéd from "./Segéd";
 
 export default class FelszállásBérlet extends Felszállás {
     #típus: string;
@@ -6,6 +7,32 @@ export default class FelszállásBérlet extends Felszállás {
 
     get ezÉrvényesFelszállás(): boolean {
         return this.#érvényes >= this._idő;
+    }
+
+    get érvényesÉvHóNap(): string {
+        return this.#érvényes.toLocaleDateString("en-CA");
+    }
+
+    get ezIngyenesUtazás(): boolean {
+        return this.ezÉrvényesFelszállás && ["NYP", "RVS", "GYK"].includes(this.#típus);
+    }
+
+    get ezKedvezményesUtazás(): boolean {
+        return this.ezÉrvényesFelszállás && ["TAB", "NYB"].includes(this.#típus);
+    }
+
+    get ezLejárHáromNap(): boolean {
+        return this.ezÉrvényesFelszállás && Segéd.napokszama2(this._idő, this.#érvényes) <= 3;
+    }
+
+    get ezLejárHáromNap2(): boolean {
+        const e1: number = this._idő.getFullYear();
+        const h1: number = this._idő.getMonth() + 1;
+        const n1: number = this._idő.getDate();
+        const e2: number = this.#érvényes.getFullYear();
+        const h2: number = this.#érvényes.getMonth() + 1;
+        const n2: number = this.#érvényes.getDate();
+        return this.ezÉrvényesFelszállás && Segéd.napokszama(e1, h1, n1, e2, h2, n2) <= 3;
     }
 
     constructor(sor: string) {

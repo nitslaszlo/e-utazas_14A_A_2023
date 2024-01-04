@@ -1,7 +1,7 @@
 ﻿import fs from "fs"; //  https://nodejs.org/docs/latest-v14.x/api/fs.html
 import http from "http"; //  https://nodejs.org/docs/latest-v14.x/api/http.html
 import url from "url"; //  https://nodejs.org/docs/latest-v14.x/api/url.html
-import Megoldás from "./Megoldás";
+import Megoldás, { ILegtöbbFelszálló } from "./Megoldás";
 
 export default function content(req: http.IncomingMessage, res: http.ServerResponse): void {
     // favicon.ico kérés kiszolgálása:
@@ -31,19 +31,16 @@ export default function content(req: http.IncomingMessage, res: http.ServerRespo
 
     res.write(`3. feladat:\nA buszra ${mo.érvénytelenFelszállásokSzáma} utas nem szállhatott fel.\n`);
 
-    //res.write("Egyszerű Hello World! (2023/2024)\n");
+    const legtöbb: ILegtöbbFelszálló = mo.legtöbbFelszálló;
+    res.write(`4. feladat:\nA legtöbb utas (${legtöbb.felszálló} fő) a ${legtöbb.megálló}. megállóban próbált felszállni.\n`);
 
-    // Tetszőleges html teg-ek és attribútumok beépítése:
-    // res.write("<span style='color: blue;'><i>Színes és dőlt Hello World!'</i></span>\n");
+    const legtöbb2: ILegtöbbFelszálló = mo.legtöbbFelszállóArray;
+    res.write(`4. feladat:\nA legtöbb utas (${legtöbb2.felszálló} fő) a ${legtöbb2.megálló}. megállóban próbált felszállni.\n`);
 
-    // Próbáljuk számra konvertálni a "kor" paraméter (http://localhost:8080/?kor=16) értékét:
-    // let korod = parseInt(params.get("kor") as string);
-    // Ha nincs "kor" paraméter megadva, vagy nem lehet számra konvertálni értékét,
-    // akkor a "korod" változóba NaN érték kerül, ilyenkor legyen 18 év az értéke:
-    // if (isNaN(korod)) korod = 18;
+    res.write(`5. feladat:\nIngyenesen utazók: ${mo.IngyenesUtazókSzáma} fő\n`);
+    res.write(`Kedvezményesen utazók: ${mo.KedvezményesenUtazókSzáma} fő\n`);
 
-    // res.write(`<label>Kérem a korod: <input type='number' name='kor' value=${korod} style='max-width:100px;' onChange='this.form.submit();'></label>\n`);
-    // res.write(`Te ${korod} éves vagy!\n`);
+    mo.figyelmeztetéseketÍr("figyelmeztetes.txt");
 
     // <---- Fejezd be a kódolást
 

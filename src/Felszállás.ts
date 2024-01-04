@@ -7,6 +7,22 @@ export default abstract class Felszállás {
         return false;
     }
 
+    get kártyaAzon(): string {
+        return this._kártyaAzon;
+    }
+
+    get ezIngyenesUtazás(): boolean {
+        return false;
+    }
+
+    get ezKedvezményesUtazás(): boolean {
+        return false;
+    }
+
+    get ezLejárHáromNap(): boolean {
+        return false;
+    }
+
     get megállóSorszáma(): number {
         return this._megállóSorszáma;
     }

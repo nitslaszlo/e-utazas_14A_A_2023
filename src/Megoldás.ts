@@ -3,7 +3,7 @@ import Felszállás from "./Felszállás";
 import FelszállásJegy from "./FelszállásJegy";
 import FelszállásBérlet from "./FelszállásBérlet";
 
-interface ILegtöbbFelszálló {
+export interface ILegtöbbFelszálló {
     megálló: number;
     felszálló: number;
 }
@@ -46,13 +46,22 @@ export default class Megoldás {
         const stat: number[] = Array(30).fill(0);
         for (const e of this.#utasadatok) stat[e.megállóSorszáma]++;
         legtöbb.felszálló = Math.max(...stat);
-        for (let i = 0; i < stat.length; i++) {
-            if (stat[i] == legtöbb.felszálló) {
-                legtöbb.megálló = i;
-                break;
-            }
-        }
+        legtöbb.megálló = stat.indexOf(legtöbb.felszálló);
+        // for (let i = 0; i < stat.length; i++) {
+        //     if (stat[i] == legtöbb.felszálló) {
+        //         legtöbb.megálló = i;
+        //         break;
+        //     }
+        // }
         return legtöbb;
+    }
+
+    public get IngyenesUtazókSzáma(): number {
+        return this.#utasadatok.filter(x => x.ezIngyenesUtazás).length;
+    }
+
+    public get KedvezményesenUtazókSzáma(): number {
+        return this.#utasadatok.filter(x => x.ezKedvezményesUtazás).length;
     }
 
     constructor(forrás: string) {
@@ -70,5 +79,17 @@ export default class Megoldás {
                     this.#utasadatok.push(new FelszállásBérlet(aktSor));
                 }
             });
+    }
+
+    public figyelmeztetéseketÍr(állomány: string): void {
+        const ki: string[] = [];
+        this.#utasadatok.forEach(e => {
+            if (e instanceof FelszállásBérlet) {
+                if (e.ezLejárHáromNap2) {
+                    ki.push(`${e.kártyaAzon} ${e.érvényesÉvHóNap}`);
+                }
+            }
+        });
+        fs.writeFileSync(állomány, ki.join("\r\n") + "\r\n");
     }
 }
