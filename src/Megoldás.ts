@@ -38,6 +38,13 @@ export default class Megoldás {
                 aktMegállóFelszálló = 1;
             }
         }
+        // Utolsó megálló ellenőrzése
+        // Nincs váltás a megállók sorszámában a végén,
+        // így ez szükséges!
+        if (aktMegállóFelszálló > legtöbb.felszálló) {
+            legtöbb.felszálló = aktMegállóFelszálló;
+            legtöbb.megálló = aktMegálló;
+        }
         return legtöbb;
     }
 
